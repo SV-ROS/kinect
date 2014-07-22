@@ -1,0 +1,137 @@
+<sdf version='1.4'>
+  <world name='default'>
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <physics type='ode'>
+      <max_step_size>0.01</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>100</real_time_update_rate>
+      <gravity>0 0 -9.8</gravity>
+    </physics>
+    
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>1.33336 -0.422442 20 3e-06 1.5698 3.04015</pose>
+        <view_controller>orbit</view_controller>
+      </camera>
+    </gui>
+    
+  
+    <include><uri>model://table</uri><name>table1</name>
+      <pose>4 0 0 0 0 0</pose>
+    </include>
+    <include><uri>model://table</uri><name>table2</name>
+      <pose>4 2 0 0 0 0</pose>
+    </include>
+    <include><uri>model://table</uri><name>table3</name>
+      <pose>4 4 0 0 0 0</pose>
+    </include>
+    <include><uri>model://table</uri><name>table4</name>
+      <pose>4 -2 0 0 0 0</pose>
+    </include>
+    <include><uri>model://table</uri><name>table5</name>
+      <pose>4 -4 0 0 0 0</pose>
+    </include>
+
+    <include><uri>model://table</uri><name>table7</name>
+      <pose>1 -2 0 0 0 0</pose>
+    </include>
+    <include><uri>model://table</uri><name>table8</name>
+      <pose>1 -4 0 0 0 0</pose>
+    </include>
+    <include><uri>model://table</uri><name>table9</name>
+      <pose>-2 -2 0 0 0 0</pose>
+    </include>
+    <include><uri>model://table</uri><name>table10</name>
+      <pose>-2 -4 0 0 0 0</pose>
+    </include>
+
+    <include><uri>model://bookshelf</uri><name>bookshelf</name>
+      <pose>0 5.89 0 0 0 0</pose>
+    </include>
+    <include><uri>model://bookshelf</uri><name>bookshelf2</name>
+      <pose>1 5.89 0 0 0 0</pose>
+    </include>
+    <include><uri>model://bookshelf</uri><name>bookshelf3</name>
+      <pose>2 5.89 0 0 0 0</pose>
+    </include>
+    <include><uri>model://bookshelf</uri><name>bookshelf4</name>
+      <pose>3 5.89 0 0 0 0</pose>
+    </include>
+    <include><uri>model://bookshelf</uri><name>bookshelf5</name>
+      <pose>4 5.89 0 0 0 0</pose>
+    </include>
+    <include><uri>model://bookshelf</uri><name>bookshelf6</name>
+      <pose>5 5.89 0 0 0 0</pose>
+    </include>
+
+    <include><uri>model://cabinet</uri><name>cabinet</name>
+      <pose>-3 2 0 0 0 3.1415</pose>
+    </include>
+    <include><uri>model://cabinet</uri><name>cabinet2</name>
+      <pose>-3 2.5 0 0 0 3.1415</pose>
+    </include>
+     
+    <model name="walls">
+      <pose>0 0 1.5 0 0 0</pose>
+      <link name="link">
+        <collision name='collision'>
+           <pose>0 6 0 0 0 0</pose>
+           <geometry><box><size>12 0.2 3</size></box></geometry>
+        </collision>
+        <collision name='collision2'>
+           <pose>0 -6 0 0 0 0</pose>
+           <geometry><box><size>12 0.2 3</size></box></geometry>
+        </collision>
+        <collision name='collision3'>
+           <pose>6 0 0 0 0 1.5708</pose>
+           <geometry><box><size>12 0.2 3</size></box></geometry>
+        </collision>
+        <collision name='collision4'>
+           <pose>-6 0 0 0 0 1.5708</pose>
+           <geometry><box><size>12 0.2 3</size></box></geometry>
+        </collision>
+        <visual name='visual'>
+           <pose>0 6 0 0 0 0</pose>
+           <geometry><box><size>12 0.2 3</size></box></geometry>
+        </visual>
+        <visual name='visual2'>
+           <pose>0 -6 0 0 0 0</pose>
+           <geometry><box><size>12 0.2 3</size></box></geometry>
+        </visual>
+        <visual name='visual3'>
+           <pose>6 0 0 0 0 1.5708</pose>
+           <geometry><box><size>12 0.2 3</size></box></geometry>
+        </visual>
+        <visual name='visual4'>
+           <pose>-6 0 0 0 0 1.5708</pose>
+           <geometry><box><size>12 0.2 3</size></box></geometry>
+        </visual>
+      </link>
+      <static>1</static>
+    </model>
+
+<!--   <model name="poster">
+      <pose>5.89 -2.5 1.5 0 1.571 0</pose>
+      <link name="link">
+        <visual name='visual'>
+           <geometry><box><size>1.66 2.00 0.001</size></box></geometry>
+           <material>
+             <script>
+              <uri>file:///home/grc/catkin_ws/src/kinect/materials/materials.material</uri>
+             <name>Materials/Poster</name>
+            </script>
+          </material>
+        </visual>
+      </link>
+      <static>1</static>
+   </model>  -->
+
+  </world>
+  
+</sdf>

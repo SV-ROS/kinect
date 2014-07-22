@@ -1,0 +1,19 @@
+material Materials/Poster
+{
+  technique
+  {
+    pass
+    {
+      ambient 1.0 1.0 1.0 1.0
+      diffuse 1.0 1.0 1.0 1.0
+      specular 0.2 0.2 0.2 1.0 12.5
+
+      texture_unit
+      {
+        texture indigoigloo_600.png
+        filtering trilinear
+      }
+    }
+  }
+}
+
