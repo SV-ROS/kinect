@@ -1,0 +1,7 @@
+<launch>
+  <include file="$(find kinect)/launch/turtlebot.launch"/>
+  <include file="$(find turtlebot_gazebo)/launch/amcl_demo.launch">
+    <arg name="map_file" value="$(find kinect)/maps/half_room12x12.yaml"/>
+  </include>
+  <include file="$(find turtlebot_rviz_launchers)/launch/view_navigation.launch"/>
+</launch>
