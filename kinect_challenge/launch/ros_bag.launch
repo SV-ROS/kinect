@@ -1,0 +1,10 @@
+<!--
+  Used for playing a ros bag ion.  
+  
+
+ -->
+<launch>
+   <arg name="bag"  default="$(optenv KC_BAG_FILE 2014-07-14-20-36-50)"/> 
+  <node name="ros_bag" pkg="rosbag" type="play" args="--clock  $(find kinect_challenge)/bags/$(arg bag).bag" />
+  
+</launch>

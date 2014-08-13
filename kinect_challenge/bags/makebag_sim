@@ -1,0 +1,8 @@
+#!/bin/bash
+
+#rosrun dynamic_reconfigure dynparam set /camera/driver data_skip 5
+
+rosbag record -b 512 -O ~/Dev/ros/catkin_ws/src/kinect_challenge/bags/$1.bag /camera/depth_registered/points /tf /tf_static /scan /odom /odom_combined /camera/rgb/image_color /depthimage_to_laserscan/parameter_descriptions /depth_to_laserscan/parameter_updates /cmd_vel_mux/active /joint_states 
+
+
+

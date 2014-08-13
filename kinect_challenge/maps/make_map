@@ -1,0 +1,5 @@
+#!/bin/bash
+roslaunch kinect_challenge gmapping_demo.launch
+
+
+
