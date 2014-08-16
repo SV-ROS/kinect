@@ -4,8 +4,8 @@
 Kinect Challenge 2014 
 
 This repo contains the following ROS packages
-Package kinect               - Provides launchers for gazebo Simulation
-Package kinect_challenge     - Provides Nodes for interaction with the Microsoft Benchmark App, and nodes and launchers to run the mapping and navigation phases
+ - Package kinect               - Provides launchers for gazebo Simulation
+ - Package kinect_challenge     - Provides Nodes for interaction with the Microsoft Benchmark App, and nodes and launchers to run the mapping and navigation phases
 
 
 ## kinect:  Simulation and navigation in gazebo
@@ -115,7 +115,7 @@ The navigator reads this file to determine the location of the waypoints.
 
  - tour.wpt:
 You must create this file, it is a list of 'from' and 'to' indexes for the waypoints to be navigated during navigation.
-Each line has two numbers, the index of the starting waypoint and he index of the destination waypoint.
+Each line has two numbers, the index of the starting waypoint and the index of the destination waypoint.
 The last line should go from the last waypoint visited back to the first way point to make a circular tour.
 Each line should start from the waypointIdx that as the destination index on the previous line.
 
