@@ -1,4 +1,4 @@
 bags/*.bag
 *~
-~.pyc
+*.pyc
 

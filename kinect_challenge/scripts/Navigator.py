@@ -33,7 +33,7 @@ class Navigator():
         self.ac = actionlib.SimpleActionClient("move_base" ,MoveBaseAction)
        
         while not self.ac.wait_for_server(rospy.Duration(5.0)):
-            print "Waiting for Move Base Server"
+            rospy.loginfo(  "Waiting for Move Base Server")
            
         self.runID = int(time.time()*1000)
         
@@ -76,7 +76,7 @@ class Navigator():
                 wpf,wpt = t.split(",")
                 tour.append((int(wpf),int(wpt)))
             
-        print "Loaded Tour Info:\n%s" % tour
+        rospy.loginfo(  "Loaded Tour Info:\n%s" % tour)
         return tour
 
     def loadWaypoints(self,waypointFile):
@@ -97,9 +97,9 @@ class Navigator():
                     waypoints.append(( ( float(match.group(2)),float(match.group(3)),float(match.group(4)) ),  ( float(match.group(5)), float(match.group(6)), float(match.group(7)), float(match.group(8))) ))
                     
                 else:
-                    print "invalid waypoint file, cannot parse text '%s'" % wp
+                    rospy.loginfo(  "invalid waypoint file, cannot parse text '%s'" % wp)
     
-        print "Found Waypoints %s" % waypoints
+        rospy.loginfo(  "Found Waypoints %s" % waypoints)
             
         return waypoints
     
@@ -224,14 +224,14 @@ class Navigator():
         
 def usage():
 
-    print "Invalid arguments, Usage:"
+    rospy.init_node( "Invalid arguments, Usage:")
     return "%s mapPath waypointFile waypointTour" %sys.argv[0]
 
 if __name__ == "__main__":
 
     sts = 0
     
-    print "Running Navigator"
+    rospy.loginfo(  "Running Navigator")
     try:
     
         rospy.init_node('navigator')
@@ -244,7 +244,7 @@ if __name__ == "__main__":
         argOffset = 0
         
         if nargs > 1:
-            print sys.argv[1]
+            #print sys.argv[1]
         
             if sys.argv[1].startswith('__name:='):
                 argOffset = 2
@@ -255,16 +255,16 @@ if __name__ == "__main__":
 
             if mapPath == "":
                 mapPath = rospy.get_param("/Navigator/MapPath","")
-                print "Found param mapPath='%s'" % mapPath
+                rospy.loginfo(  "Found param mapPath='%s'" % mapPath)
                 
             mapPath = mapPath.strip()
             
             if mapPath == "":
-                print "Error: No mapPath specified"
+                rospy.loginfo(  "Error: No mapPath specified")
                 print usage()
                 sts= 1
             else:
-                print "waypoints will be read from: '%s'" % mapPath
+                rospy.loginfo(  "waypoints will be read from: '%s'" % mapPath)
                  
         if sts ==0:
             if nargs >= 3+argOffset:
@@ -272,16 +272,16 @@ if __name__ == "__main__":
 
             if waypointFile == "":
                 waypointFile = rospy.get_param("/Navigator/WaypointFile","")
-                print "Found param Waypointfile='%s'" % waypointFile
+                rospy.loginfo(  "Found param Waypointfile='%s'" % waypointFile)
                 
             waypointFile = waypointFile.strip()
             
             if waypointFile == "":
-                print "Error: No waypoints file specified"
+                rospy.loginfo(  "Error: No waypoints file specified")
                 print usage()
                 sts= 1
             else:
-                print "Waypoints file: '%s'" % waypointFile
+                rospy.loginfo(  "Waypoints file: '%s'" % waypointFile)
  
         if sts ==0:
             if nargs >= 4+argOffset:
@@ -289,16 +289,16 @@ if __name__ == "__main__":
 
             if waypointTour == "":
                 waypointTour = rospy.get_param("/Navigator/WaypointTour","")
-                print "Found param waypointTour='%s'" % waypointTour
+                rospy.loginfo(  "Found param waypointTour='%s'" % waypointTour)
                 
             waypointTour = waypointTour.strip()
             
             if waypointTour == "":
-                print "Error: No waypointTour file specified"
+                rospy.loginfo(  "Error: No waypointTour file specified")
                 print usage()
                 sts= 1
             else:
-                print "waypointTour file: '%s'" % waypointFile
+                rospy.loginfo(  "waypointTour file: '%s'" % waypointFile)
  
  
         if sts ==0:
@@ -307,11 +307,11 @@ if __name__ == "__main__":
             sts = nav.Run()
 
     except Exception as ex:
-        print "Navigator Crashed with exception: %s" % str(ex)
+        rospy.loginfo(  "Navigator Crashed with exception: %s" % str(ex))
         sts = -1
         
     finally:
-        print "Navigator Finished"
+        rospy.loginfo(  "Navigator Finished")
         sys.exit(sts)
 
 

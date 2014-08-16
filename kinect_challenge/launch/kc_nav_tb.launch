@@ -1,23 +1,9 @@
 <launch>
 
-  <!--  Point to the map file created during mapping ---/>
-  <arg name="map_file" default="$(find kinect_challenge)/maps/map.yaml"/>
+    <!--  Point to the map file created during mapping -->
+    <arg name="map_file" default="$(find kinect_challenge)/maps/map.yaml"/>
 
-
-  <!---  *** /Change/Add/Include the base launch nodes here **  ---->
-  
-    <include file="$(find turtlebot_bringup)/launch/minimal.launch" />
-    <include file="$(find turtlebot_bringup)/launch/3dsensor.launch" />
-    
-  <!-----------------   End Base launch config  --------------------->
-  
-    <!----  Change Teleop config if using different method or controller  --->
-    <include file="$(find turtlebot_teleop)/launch/xbox360_teleop.launch" />
-  
-    <include file="$(find turtlebot_navigation)/launch/amcl_demo.launch">
-		<arg name="map_file" value="$(arg map_file)" />
-	</include>
-    
+   
     <include file="$(find kinect_challenge)/launch/view_robot.launch" />
   
     <node type="MSBMIOSvs.py" name = "MSBMIOSvs"    pkg="kinect_challenge" >

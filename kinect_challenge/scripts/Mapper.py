@@ -116,29 +116,34 @@ class Mapper():
     def JoyCallback(self,msg):
         keyState = msg.buttons[self.lmButtonIdx]
         if keyState==1:
+            rospy.loginfo( "Saving landmark %d" % self.waypointNum)
             #print "Got Joy Message: %s" % str(msg)
             if self.tf != None:
             
                 sts = MSBMIOClient.MSBMIOClient("map",str(self.waypointNum),"0")
-                print "MSBMIO returned %s" % sts
+                rospy.loginfo(  "MSBMIO returned %s" % sts)
                 if sts =="OK":
                     self.marker_pub.publish(self.makeArrowMarker(self.tf,self.waypointNum))
                     self.marker_pub.publish(self.makeTextMarker(self.tf,self.waypointNum))
                     
-                    print "Saving waypoint %d: %s, %s" %(self.waypointNum,str(self.tf[0]),str(self.tf[1]))
+                    rospy.loginfo(  "Saving waypoint %d: %s, %s" %(self.waypointNum,str(self.tf[0]),str(self.tf[1])))
                     with open(self.waypointFile,'a') as wpfh:
                         wpfh.write("%d: %s\n" % (self.waypointNum,str(self.tf)))
                         
                     self.waypointNum = self.waypointNum+1
                 
                 else:
-                    print "Failed to record waypoint, please try again"
-                    
+                    rospy.loginfo(  "MS Benchmark Failed to record waypoint, please try again")
+            else:
+                rospy.logwarn("Can't save landmark, No Transform Yet")
+                
         keyState = msg.buttons[self.msButtonIdx]
         if keyState==1:
             mapFile = "map_%s" % time.ctime().replace(":","_")
             rospy.loginfo( "Saving map to file '%s'" % mapFile)
-            sts = subprocess.call('rosrun map_server map_saver -f "%s"' % os.path.join(self.mapPath,mapFile),shell=True)
+            sts = subprocess.call('cd "%s"; rosrun map_server map_saver -f "%s"' % (self.mapPath,mapFile),shell=True)
+            # Save a default copy just named "map" also
+            sts = subprocess.call('cd "%s"; rosrun map_server map_saver -f "%s"' % (self.mapPath,"map"),shell=True)
             rospy.loginfo( "Save Map returned sts %d" % sts)
         
 def usage():
@@ -150,7 +155,7 @@ if __name__ == "__main__":
 
     sts = 0
     
-    print "Running Mapper"
+    rospy.loginfo(  "Running Mapper")
     try:
     
         rospy.init_node('mapper')
@@ -165,7 +170,7 @@ if __name__ == "__main__":
         argOffset = 0
         
         if nargs > 1:
-            print sys.argv[1]
+            #print sys.argv[1]
         
             if sys.argv[1].startswith('__name:='):
                 argOffset = 2
@@ -176,16 +181,16 @@ if __name__ == "__main__":
 
             if mapPath == "":
                 mapPath = rospy.get_param("/Mapper/MapPath","")
-                print "Found param mapPath='%s'" % mapPath
+                rospy.loginfo(  "Found param mapPath='%s'" % mapPath)
                 
             mapPath = mapPath.strip()
             
             if mapPath == "":
-                print "Error: No mapPath specified"
+                rospy.loginfo(  "Error: No mapPath specified")
                 print usage()
                 sts= 1
             else:
-                print "map and waypoints will be saved in: '%s'" % mapPath
+                rospy.loginfo(  "map and waypoints will be saved in: '%s'" % mapPath)
                  
         if sts ==0:
             if nargs >= 3+argOffset:
@@ -193,16 +198,16 @@ if __name__ == "__main__":
 
             if waypointFile == "":
                 waypointFile = rospy.get_param("/Mapper/WaypointFile","")
-                print "Found param Waypointfile='%s'" % waypointFile
+                rospy.loginfo(  "Found param Waypointfile='%s'" % waypointFile)
                 
             waypointFile = waypointFile.strip()
             
             if waypointFile == "":
-                print "Error: No waypoints file specified"
+                rospy.loginfo(  "Error: No waypoints file specified")
                 print usage()
                 sts= 1
             else:
-                print "Waypoints will be saved to: '%s'" % waypointFile
+                rospy.loginfo(  "Waypoints will be saved to: '%s'" % waypointFile)
  
         if sts ==0:
             if nargs >= 4+argOffset:
@@ -213,11 +218,11 @@ if __name__ == "__main__":
                 
            
             if lmButtonIdx == -1:
-                print "No lmButtonIdx specified"
+                rospy.loginfo(  "No lmButtonIdx specified")
                 print usage()
                 sts= 1
             else:
-                print "Using lmButtonIdx %d" % lmButtonIdx
+                rospy.loginfo(  "Using lmButtonIdx %d" % lmButtonIdx)
 
         if sts ==0:
             if nargs >= 5+argOffset:
@@ -228,11 +233,11 @@ if __name__ == "__main__":
                 
            
             if msButtonIdx == -1:
-                print "No msButtonIdx specified"
+                rospy.loginfo(  "No msButtonIdx specified")
                 print usage()
                 sts= 1
             else:
-                print "Using msButtonIdx %d" % msButtonIdx
+                rospy.loginfo(  "Using msButtonIdx %d" % msButtonIdx)
                 
         if sts ==0:
                 
@@ -240,11 +245,11 @@ if __name__ == "__main__":
             sts = mapper.Run()
 
     except Exception as ex:
-        print "Mapper Crashed with exception: %s" % str(ex)
+        rospy.loginfo(  "Mapper Crashed with exception: %s" % str(ex))
         sts = -1
         
     finally:
-        print "Mapper Finished"
+        rospy.loginfo(  "Mapper Finished")
         sys.exit(sts)
 
 
