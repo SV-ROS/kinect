@@ -38,11 +38,11 @@ To try navigation in the room model run `roslaunch kinect amcl_demo.launch`. It 
 
 This package provides scripts and launch files for the competition environment for both the mapping and navigation phases
 It provides three Nodes:
-MSBMIOSvs    - A service for communicating with the Microsoft Benchmark Computer, a simulation mode is available so you 
+ - MSBMIOSvs    - A service for communicating with the Microsoft Benchmark Computer, a simulation mode is available so you 
               don't need to run the Microsoft app to test the mapping and navigation. (see configuration below)
 
-Mapper.py    - A Node that runs the mapping phase
-Navigator.py - A Node that runs the navigation phase
+ - Mapper.py    - A Node that runs the mapping phase
+ - Navigator.py - A Node that runs the navigation phase
 
 ### Basic launch instructions.
 
@@ -56,7 +56,9 @@ To run mapping run
  `roslaunch kinect_challenge kc_map.launch`. 
 
 It should launch everything you need for mapping (see configuration below)
+
 Drive around to create the map, then visit each waypoint and press 'A' on the joy stick to record the location of the waypoint.
+
 At the end press 'X' to save the map and waypoint locations.
 
 After Mapping configure the maps/tour.wpt file and run Navigation (see below)
@@ -73,6 +75,7 @@ To run navigation run
  `roslaunch kinect_challenge kc_nav.launch`.
 
 It should launch everything you need for navigation (see configuration below)
+
 The robot should be placed close to the first waypoint at the start, when the launch starts the robot should drive from waypoint to waypoint in the order 
 defined in the .../maps/tour.wpt file (see configuration below)
 
@@ -92,14 +95,15 @@ For mapping the Joystick buttons used can be configured with the lmButtonIdx and
 ### Microsoft Benchmark Communications
 
 The MSBMIOSvs node uses a couple of parameters to configure to IP address and port
-host_IP   - the ip address of the windows PC running the Microsoft app. (must be in XXX.XXX.XXX.XXX format, host name not supported)
-port      - the port to talk to the MS app on, default = 7576
+ - host_IP   - the ip address of the windows PC running the Microsoft app. (must be in XXX.XXX.XXX.XXX format, host name not supported)
+ - port      - the port to talk to the MS app on, default = 7576
 
 When the MS App is running it expects to see the Fiducial near the center of its camera view when the robot is at a waypoint.
 It will time out with an error if it cant find the image in a short time.
 
 Simulating Microsoft App
-if you enter "sim" for the host_IP instead of a valid IP address the node will simulate the Microsoft app and just alway return an "OK" status
+
+If you enter "sim" for the host_IP instead of a valid IP address the node will simulate the Microsoft app and just alway return an "OK" status
 
 ### Data Files
  
@@ -129,7 +133,7 @@ See the Microsoft Rules for details of what makes a valid tour.
 ### To Do:
 
 
-Handle failure to find a way point.
-Allow restarting from an intermediate location
-Allow the runID to be manually set before launching Navigation
+ - Handle failure to find a way point.
+ - Allow restarting from an intermediate location
+ - Allow the runID to be manually set before launching Navigation
 
