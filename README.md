@@ -46,9 +46,9 @@ It provides three Nodes:
 
 It now supports the real Pinoner P3DX robot.
 It also needs:
-    rtabmap installed
-    ROSARIA installed
-    and some other ros nodes, (sound_play)
+   - rtabmap installed
+   - ROSARIA installed
+   - and some other ros nodes, (sound_play)
 
     sorry dependencies are not fully up to date.
 
@@ -96,7 +96,7 @@ The Navigation Node generates the RunID sent to the microsoft app using an integ
 
 The launch files are in kinect_challenge\launch and can be modified to fit your robot.
 
-Modify the kc_map.launch and kc_nav.launch to suit your robot (see comments in the files to add your base launch entries)
+Modify the kc_p3dx_map.launch and kc_p3dx_nav.launch to suit your robot (see comments in the files to add your base launch entries)
 You may need to modify the teleop launch if you are not using a Microsoft XBox 360 controller
 
 For mapping the Joystick buttons used can be configured with the lmButtonIdx and msButtonIdx parameters passed to the Mapper.py node
