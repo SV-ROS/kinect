@@ -116,7 +116,7 @@
       <static>1</static>
     </model>
 
-<!--   <model name="poster">
+   <model name="poster">
       <pose>5.89 -2.5 1.5 0 1.571 0</pose>
       <link name="link">
         <visual name='visual'>
@@ -130,7 +130,22 @@
         </visual>
       </link>
       <static>1</static>
-   </model>  -->
+   </model>  
+   <model name="poster_groovy">
+      <pose>5.89 2.5 1.5 0 1.571 0</pose>
+      <link name="link">
+        <visual name='visual'>
+           <geometry><box><size>1.66 1.20 0.005</size></box></geometry>
+           <material>
+             <script>
+              <uri>file:///home/grc/catkin_ws/src/kinect/materials/materials.material</uri>
+             <name>Materials/Groovy</name>
+            </script>
+          </material>
+        </visual>
+      </link>
+      <static>1</static>
+   </model>  
 
   </world>
   

@@ -1,4 +1,9 @@
 bags/*.bag
-*~
-*.pyc
+**/*~
+scripts/*.pyc
+maps/*.bak
+maps/*.yaml
+maps/*.pgm
+maps/old
+launch/old
 

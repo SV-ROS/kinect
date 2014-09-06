@@ -1,0 +1,22 @@
+<!-- -->
+<launch>
+  <!-- plumbing 
+  <node pkg="tf" type="static_transform_publisher" name="link1_broadcaster" args="0 0 0 0 0 0 base_link base_footprint 100" />
+  <node pkg="topic_tools" type="relay" name="relay1" args="/p3dx/odom /odom" />
+  <node pkg="topic_tools" type="relay" name="relay2" args="/navigation_velocity_smoother/raw_cmd_vel /p3dx/cmd_vel" />
+
+  <include file="$(find kinect)/launch/pioneer.launch"/>
+  <include file="$(find turtlebot_gazebo)/launch/amcl_demo.launch">
+    <arg name="map_file" value="$(find kinect)/maps/half_room12x12.yaml"/>
+  </include>
+  <include file="$(find turtlebot_rviz_launchers)/launch/view_navigation.launch"/>
+  -->
+  
+  <node pkg="topic_tools" type="relay" name="relay1" args="/RosAria/pose /odom" />
+  <node pkg="topic_tools" type="relay" name="relay2" args="/navigation_velocity_smoother/raw_cmd_vel /RosAria/cmd_vel" />
+  
+  <include file="$(find kinect)/launch/new/tbnav/amcl_demo.launch">
+    <arg name="map_file" value="$(find kinect)/maps/girts1.yaml"/>
+  </include>
+  
+</launch>
