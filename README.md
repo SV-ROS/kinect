@@ -44,6 +44,15 @@ It provides three Nodes:
  - Mapper.py    - A Node that runs the mapping phase
  - Navigator.py - A Node that runs the navigation phase
 
+It now supports the real Pinoner P3DX robot.
+It also needs:
+    rtabmap installed
+    ROSARIA installed
+    and some other ros nodes, (sound_play)
+
+    sorry dependencies are not fully up to date.
+
+
 ### Basic launch instructions.
 
 
@@ -53,7 +62,7 @@ If running the Microsoft app start it on the windows computer first, else config
 
 To run mapping run
 
- `roslaunch kinect_challenge kc_map.launch`. 
+ `roslaunch kinect_challenge kc_p3dx_map.launch`. 
 
 It should launch everything you need for mapping (see configuration below)
 
@@ -72,7 +81,7 @@ If running the Microsoft app start it on the windows computer first, else config
 
 To run navigation run
 
- `roslaunch kinect_challenge kc_nav.launch`.
+ `roslaunch kinect_challenge kc_p3dx_nav.launch`.
 
 It should launch everything you need for navigation (see configuration below)
 
