@@ -258,14 +258,17 @@ class Navigator():
                     
                     if sts =="OK":  # MSBM accepted waypoint
                     
-                        self.setNextWaypoint() # get next leg
+                       
                         state = 0 # go back to send next start notification
                         rospy.loginfo("Goal achieved, start next segment" )
                         self.say("Reached goal waypoint %d"%wpIdx)
+                        self.setNextWaypoint() # get next leg
+                        
 
                     else: # MSBM did not like us, try again
                         rospy.loginfo( "Failed to record arrival, retry")
-                        self.say("Failed to notify benchmark that goal waypoint %d reached"%wpIdx)
+                        self.say("Failed to notify benchmark that goal waypoint %d reached. Will retry"%wpIdx)
+                       
                         state = 0
 
                 else: # move base failed to get us there
@@ -310,15 +313,15 @@ class Navigator():
         toWP = ts[1]
 
         # check from wp is valid
-        if fromWP > numWP :
-            msg = "Invalid from waypoint %d in tour step %d, resetting tour to beginning" % (fromWP,self.toutIdx)
+        if fromWP >= numWP :
+            msg = "Invalid from waypoint %d in tour step %d, resetting tour to beginning" % (fromWP,self.tourIdx)
             rospy.loginfo(msg)
             self.say(msg)
             self.tourIdx = 0
 
         # check to wp is valid
-        if toWP > toWP :
-            msg = "Invalid to waypoint %d in tour step %d, resetting tour to beginning" % (toWP,self.toutIdx)
+        if toWP >= toWP :
+            msg = "Invalid to waypoint %d in tour step %d, resetting tour to beginning" % (toWP,self.tourIdx)
             rospy.loginfo(msg)
             self.say(msg)
             self.tourIdx = 0

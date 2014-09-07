@@ -1,4 +1,5 @@
 <launch>
+  <arg name="JS_DEV" default="/dev/input/js0"/>
   <!--
     Push the left frontal button labeled as 'LB' to activate cmd_vel publishing.
     Move the left stick around to control the velocity.
@@ -15,6 +16,8 @@
     <remap from="turtlebot_teleop_joystick/cmd_vel" to="/teleop_velocity_smoother/raw_cmd_vel"/>
   </node>
 
-  <node pkg="joy" type="joy_node" name="joystick"/>
+  <node pkg="joy" type="joy_node" name="joystick">
+    <param name="dev" value="$(arg JS_DEV)" />
+  </node>
 
 </launch>

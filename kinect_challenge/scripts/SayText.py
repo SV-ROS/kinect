@@ -16,6 +16,7 @@
 #
 #######################
 import rospy
+import time
 
 from sound_play.msg import SoundRequest
 
@@ -33,3 +34,4 @@ class SayText:
 	msg.arg = text_msg
 
 	self.soundPub.publish(msg)
+	time.sleep(2)
