@@ -49,6 +49,7 @@ import SayText
 import os
 from tf.transformations import *
 from visualization_msgs.msg import Marker
+from std_srvs.srv import Empty
 
 ###############################################
 #
@@ -237,38 +238,49 @@ class Mapper():
 
         # is save map button idx ok
         if self.msButtonIdx >= 0 and self.msButtonIdx < len(msg.buttons):
-                keyState = msg.buttons[self.msButtonIdx] # get state of save map button
+            keyState = msg.buttons[self.msButtonIdx] # get state of save map button
         else:
             keyState = -1
 
         if keyState==1: # save map button pressed
-            self.say("Saving map" )
+            self.saveMap()
+            
 
-            # create timestamp for map file
-            timeStamp = "%s" % time.ctime().replace(":","_").replace(" ","_")
-            mapFile = "map_%s" % timeStamp
-            dbFile = "kc_map_%s.db" % timeStamp
+    def saveMap(self):
+        self.say("Saving map" )
 
-            # save map file using map_server
-            rospy.loginfo( "Saving map to file '%s'" % mapFile)
-            sts = subprocess.call('cd "%s"; rosrun map_server map_saver -f "%s"' % (self.mapPath,mapFile),shell=True)
 
-            # Save a default copy just named "map" also
-            if sts == 0:
-                sts = subprocess.call('cd "%s"; rosrun map_server map_saver -f "%s"' % (self.mapPath,"map"),shell=True)
+        # Put rtabmap in localization mode so it does not continue to update map after we save it
+        rtmsp = rospy.ServiceProxy('rtabmap/set_mode_localization',Empty())
+        rtmsp()
+        
+        
+        # create timestamp for map file
+        timeStamp = "%s" % time.ctime().replace(":","_").replace(" ","_")
+        mapFile = "map_%s" % timeStamp
+        dbFile = "kc_map_%s.db" % timeStamp
 
-            # make backup of the rtabmap DB
-            dbPath = os.environ["HOME"]
-            if sts == 0:
-                sts = subprocess.call('cp "%s/.ros/rtabmap.db" "%s/.ros/%s"' % (dbPath,dbPath,dbFile),shell=True)
+        # save map file using map_server
+        rospy.loginfo( "Saving map to file '%s'" % mapFile)
+        sts = subprocess.call('cd "%s"; rosrun map_server map_saver -f "%s"' % (self.mapPath,mapFile),shell=True)
 
-            rospy.loginfo( "Save Map returned sts %d" % sts)
+        # Save a default copy just named "map" also
+        if sts == 0:
+            sts = subprocess.call('cd "%s"; rosrun map_server map_saver -f "%s"' % (self.mapPath,"map"),shell=True)
 
-            # let user know what happened
-            if sts==0:
-                self.say("Map Saved ok" )
-            else:
-                self.say("Save map failed. Status = %d" % sts)
+        # make backup of the rtabmap DB
+        dbPath = os.environ["HOME"]
+        if sts == 0:
+            sts = subprocess.call('cp "%s/.ros/rtabmap.db" "%s/.ros/%s"' % (dbPath,dbPath,dbFile),shell=True)
+
+        rospy.loginfo( "Save Map returned sts %d" % sts)
+
+        # let user know what happened
+        if sts==0:
+            self.say("Map Saved ok" )
+        else:
+            self.say("Save map failed. Status = %d" % sts)
+
         
 def usage():
 

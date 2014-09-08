@@ -257,12 +257,10 @@ class Navigator():
                     sts = MSBMIOClient.MSBMIOClient("end",str(wpIdx),"%d" % self.runID)
                     
                     if sts =="OK":  # MSBM accepted waypoint
-                    
-                       
-                        state = 0 # go back to send next start notification
                         rospy.loginfo("Goal achieved, start next segment" )
                         self.say("Reached goal waypoint %d"%wpIdx)
                         self.setNextWaypoint() # get next leg
+                        state = 0 # go back to send next start notification
                         
 
                     else: # MSBM did not like us, try again
@@ -296,7 +294,7 @@ class Navigator():
         return 0
 
     # get next leg of the tour
-    # validates the the to and from waypoints are valid waypoints in the waypoints list
+    # validates that the to and from waypoints are valid waypoints in the waypoints list
     def setNextWaypoint(self):
 
         # get next leg, loop to start once we go past the end
@@ -320,7 +318,7 @@ class Navigator():
             self.tourIdx = 0
 
         # check to wp is valid
-        if toWP >= toWP :
+        if toWP >= numWP :
             msg = "Invalid to waypoint %d in tour step %d, resetting tour to beginning" % (toWP,self.tourIdx)
             rospy.loginfo(msg)
             self.say(msg)
