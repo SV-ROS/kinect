@@ -1,0 +1,13 @@
+<launch>
+
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" clear_params="true" output="screen">
+    <remap from="cmd_vel" to="/p3dx/cmd_vel" />
+    <rosparam file="$(find kinect_challenge)/config/sim_p3dx_nav_config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find kinect_challenge)/config/sim_p3dx_nav_config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find kinect_challenge)/config/sim_p3dx_nav_config/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find kinect_challenge)/config/sim_p3dx_nav_config/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find kinect_challenge)/config/sim_p3dx_nav_config/base_local_planner_params.yaml" command="load" />
+    <!-- rosparam file="$(find kinect_challenge)/config/sim_p3dx_nav_config/move_base_params.yaml" command="load" / -->
+  </node>
+  
+</launch>
