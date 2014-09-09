@@ -22,6 +22,7 @@
           <param name="queue_size" type="int" value="30"/>
         
           <!-- RTAB-Map's parameters: do "rosrun rtabmap rtabmap (double-dash)params" to see the list of available parameters. -->
+          <param name="Mem/IncrementalMemory" type="string" value="false"/>         <!-- false = Localization mode-->
           <param name="Rtabmap/DatabasePath" type="string" value="$(arg HOME)/.ros/rtabmap.db"/>  <!-- Database used for localization -->
           <param name="Rtabmap/DetectionRate" type="string" value="1"/>     <!-- Don't need to do relocation very often! Though better results if the same rate as when mapping. -->
           <param name="DbSqlite3/CacheSize" type="string" value="10000"/>           <!-- Sqlite cache size (default is 2000) -->
@@ -44,9 +45,7 @@
     </node>
 
   </group>
-  
-  <!-- include file="$(find kinect_challenge)/launch/sim_rtabmapviz.launch" / -->
-  
+    
   <node type="MSBMIOSvs.py" name = "MSBMIOSvs" pkg="kinect_challenge" output="screen">
     <!-- host IP address, IP address of PC running Microsoft Benchmark -->
     <!-- set to "sim" to simulate connection to the Microsoft app (always returns "OK") -->

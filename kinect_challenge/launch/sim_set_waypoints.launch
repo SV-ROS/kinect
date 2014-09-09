@@ -2,7 +2,7 @@
 
   <include file="$(find kinect_challenge)/launch/sim_p3dx_localize.launch" />
     
-  <node type="SetWaypoints.py"    name = "SetWaypoints"    pkg="kinect_challenge" output="screen">
+  <node type="Mapper.py"    name = "SetWaypoints"    pkg="kinect_challenge" output="screen">
     <param name="MapPath" type="str" value="$(find kinect_challenge)/maps" />
     
     <!-- Waypoints saved during mapping, file in maps folder -->

@@ -19,6 +19,7 @@
           <param name="queue_size" type="int" value="10"/>
         
           <!-- RTAB-Map's parameters: do "rosrun rtabmap rtabmap (double-dash)params" to see the list of available parameters. -->
+          <param name="Mem/IncrementalMemory" type="string" value="true"/>          <!-- true = Mapping/SLAM mode-->
           <param name="Rtabmap/DatabasePath" type="string" value="$(arg HOME)/.ros/rtabmap.db"/>  <!-- Database location -->
           <param name="Rtabmap/DetectionRate" type="string" value="1"/>     <!-- Don't need to do relocation very often! Though better results if the same rate as when mapping. -->
           <param name="DbSqlite3/CacheSize" type="string" value="10000"/>           <!-- Sqlite cache size (default is 2000) -->
