@@ -1,0 +1,66 @@
+<launch>    
+
+    <arg name="HOME" default="$(env HOME)" />
+
+    <!--  set one and only one of these true (1)-->
+    <arg name="USE_FREENECT" default="true" />
+    <arg name="USE_OPENNI"   default="false" />
+
+
+    <!-- Load the URDF into the ROS Parameter Server -->
+    <param name="robot_description" command="$(find xacro)/xacro.py '$(find kinect)/urdf/p3dx_real.xacro'" />
+
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+        <param name="publish_frequency" type="double" value="30.0" />
+    </node>
+
+
+    <node pkg="tf" type="static_transform_publisher" name="static_transform_publisherx" args="0 0 0 0 0 0          base_link base_footprint 50"/>
+    <node pkg="tf" type="static_transform_publisher" name="static_transform_publisher2" args="-0.2 0 0.036 0 0 0   base_link center_wheel 50"/>
+    <node pkg="tf" type="static_transform_publisher" name="static_transform_publisher3" args="-0.178 0 0.052 0 0 0 base_link swivel 50"/>
+
+
+    <node pkg="rosaria" type="RosAria" name="RosAria" />
+
+    <node pkg="topic_tools" type="relay" name="relay1" args="/RosAria/pose /odom" />
+    <node pkg="topic_tools" type="relay" name="relay2" args="/robot_cmd_vel /RosAria/cmd_vel" />
+
+
+
+
+    <include  if="$(arg USE_FREENECT)" file="$(find freenect_launch)/launch/freenect.launch" >
+        <arg name="depth_registration" value="true" />
+    </include>
+
+    <include  if="$(arg USE_OPENNI)" file="$(find openni_launch)/launch/openni.launch" >
+        <arg name="depth_registration" value="true" />
+    </include>
+
+
+    <!--  Change Teleop config if using different method or controller  -->
+    <!--   <include file="$(find turtlebot_teleop)/launch/ps3_teleop.launch" />  -->
+    <!--   <include file="$(find kinect_challenge)/launch/ps3_teleop.launch" />  -->
+    <include file="$(find p3dx_launch)/launch/xbox360_teleop.launch" >
+       <arg name="output_cmd_vel_topic" value="/robot_cmd_vel" />
+    </include>
+  
+   
+    <node pkg="sound_play" name="soundplay" type="soundplay_node.py" />
+
+<!--	<arg name="marker_size" default="10.0" />
+	<arg name="max_new_marker_error" default="0.08" />
+	<arg name="max_track_error" default="0.2" />
+	<arg name="cam_image_topic" default="/camera/rgb/image_raw" />
+	<arg name="cam_info_topic" default="/camera/rgb/camera_info" />	
+	<arg name="output_frame" default="/base_link" />
+	<node name="ar_track_alvar" pkg="ar_track_alvar" type="individualMarkersNoKinect" respawn="false" output="screen" args="$(arg marker_size) $(arg max_new_marker_error) $(arg max_track_error) $(arg cam_image_topic) $(arg cam_info_topic) $(arg output_frame)" />
+-->
+	<arg name="marker_size" default="25.4" />
+	<arg name="max_new_marker_error" default="0.08" />
+	<arg name="max_track_error" default="0.2" />
+	<arg name="cam_image_topic" default="/camera/depth_registered/points" />
+	<arg name="cam_info_topic" default="/camera/rgb/camera_info" />		
+	<arg name="output_frame" default="/base_link" />
+	<node name="ar_track_alvar" pkg="ar_track_alvar" type="individualMarkers" respawn="false" output="screen" args="$(arg marker_size) $(arg max_new_marker_error) $(arg max_track_error) $(arg cam_image_topic) $(arg cam_info_topic) $(arg output_frame)" />
+
+</launch>
