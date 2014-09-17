@@ -230,7 +230,8 @@ class Navigator():
                 sts=MSBMIOClient.MSBMIOClient("start",str(wpIdx),"%d" % self.runID) # always returns OK
                 
                 self.say("Starting from waypoint %d"%wpIdx)
-                #time.sleep(5)
+                time.sleep(5)
+                
                 if sts =="OK": # should always be ok on start leg
 
                     
