@@ -324,10 +324,10 @@ class Navigator():
                     
                     # rotate 360 degrees with a small forward motion
                     cmd_vel = Twist()
-                    cmd_vel.angular.z = 0.5
+                    cmd_vel.angular.z = 0.2
                     cmd_vel.linear.x = 0.02
                     
-                    lookaround_interval = 8
+                    lookaround_interval = 20
                     tick = 0.2
                     clock = 0.0
                                         
