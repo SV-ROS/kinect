@@ -5,7 +5,7 @@ Kinect Challenge 2014
 
 This repo contains the following ROS packages
  - Package kinect               - Provides launchers for gazebo Simulation
- - Package kinect_challenge     - Provides Nodes for interaction with the Microsoft Benchmark App, and nodes and launchers to run the mapping and navigation phases
+ - Package kinect_challenge     - Provides Nodes for interaction with the Microsoft Benchmark App, and nodes and launchers to run the mapping, waypoint creation and navigation phases
 
 
 ## kinect:  Simulation and navigation in gazebo
@@ -36,16 +36,15 @@ To try navigation in the room model run `roslaunch kinect amcl_demo.launch`. It 
 ## kinect_challenge:  Competition Environment
 
 
-This package provides scripts and launch files for the competition environment for both the mapping and navigation phases
-It provides three Nodes:
+This package provides scripts and launch files for the competition environment for the mapping, waypoint creation and navigation phases
+It provides these Nodes:
  - MSBMIOSvs    - A service for communicating with the Microsoft Benchmark Computer, a simulation mode is available so you 
               don't need to run the Microsoft app to test the mapping and navigation. (see configuration below)
-
- - Mapper.py    - A Node that runs the mapping phase
+ - Mapper.py    - A Node that runs the mapping and waypoint creation phases
  - Navigator.py - A Node that runs the navigation phase
  - SayText.py   - A node to interface with ROS sound_paly for voice synth.
 
-It now supports the real Pinoner P3DX robot.
+It supports the real Pinoner P3DX robot.
 It also needs:
    - rtabmap installed
    - ROSARIA installed
