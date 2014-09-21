@@ -43,6 +43,7 @@ It provides three Nodes:
 
  - Mapper.py    - A Node that runs the mapping phase
  - Navigator.py - A Node that runs the navigation phase
+ - SayText.py   - A node to interface with ROS sound_paly for voice synth.
 
 It now supports the real Pinoner P3DX robot.
 It also needs:
@@ -54,28 +55,44 @@ It also needs:
 
 
 ### Basic launch instructions.
-
+Running the challenge scenarios is done in three phases, mapping, waypoint creation and navigation.
 
 #### Mapping:
 
-If running the Microsoft app start it on the windows computer first, else configure it for sim mode, (see below)
-
-To run mapping run
+To run the mapping phase launch
 
  `roslaunch kinect_challenge kc_p3dx_map.launch`. 
 
 It should launch everything you need for mapping (see configuration below)
 
-Drive around to create the map, then visit each waypoint and press 'A' on the joy stick to record the location of the waypoint.
+Drive around using teloep to create the map (you will not be creating the waypoints at this time) .
 
-At the end press 'X' to save the map and waypoint locations.
+At the end press 'X' to save the 2D map.
 
-After Mapping configure the maps/tour.wpt file and run Navigation (see below)
+Use ^C to end the launch file when done.
+
+The final rtabmap.db of the 3D map is not fully saved until the launch file has fully terminated.
+
+
+#### Waypoint creation
+If running the Microsoft app start it on the windows computer first, else configure it for sim mode, (see below)
+
+To run the waypoint creation phase launch
+ `roslaunch kinect_challenge kc_p3dx_mwp.launch`
+ 
+It should launch everything you need for waypoint creation (see configuration below)
+ 
+Start driving using teleop to get the robot localized.
+
+Press 'A' on the joy stick to record the location of each waypoint.
+
+Use ^C to end the launch file when done.
+
+After all waypoints are saved configure the maps/tour.wpt file used in the Navigation Phase (see below).
 
 Note If using the actual MS App it expects there to be 8 waypoints recorded during mapping and used during navigation.
 
 #### Navigation:
-
 
 If running the Microsoft app start it on the windows computer first, else configure it for sim mode, (see below)
 
@@ -85,12 +102,20 @@ To run navigation run
 
 It should launch everything you need for navigation (see configuration below)
 
-The robot should be placed close to the first waypoint at the start, when the launch starts the robot should drive from waypoint to waypoint in the order 
+Start driving using teleop to get the robot localized, (you have about 15 seconds before the autonomous navigation begins).
+
+The robot should be placed close to the first waypoint at the start, after the launch starts the robot should drive from waypoint to waypoint in the order 
 defined in the .../maps/tour.wpt file (see configuration below)
 
 Note: orientation matters, the robot will try to match the direction it was facing when the waypoint was recorded.
 
 The Navigation Node generates the RunID sent to the microsoft app using an integer based on the current time when the node is launched.
+
+During navigation if the robot gets stuck and can't make progress towards the current goal, it will chose another goal, try to drive towards that for about three seconds
+and then try driving to the original goal again.
+
+NOTE: In waypoint creation and Navigation Phases you can display the 3D point cloud in rviz, after the robot is localized click the 'Download Map' check-box in the RTABMAP
+plug-in and it should be display the point cloud.
 
 ### Configuration:
 
@@ -140,8 +165,6 @@ The robot should start at index 0
 See the Microsoft Rules for details of what makes a valid tour.
 
 ### To Do:
-
-
  - Handle failure to find a way point.
  - Allow restarting from an intermediate location
  - Allow the runID to be manually set before launching Navigation
