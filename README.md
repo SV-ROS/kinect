@@ -53,6 +53,21 @@ It also needs:
 
     sorry dependencies are not fully up to date.
 
+### Maps.
+
+The 2D maps created during the Challenge are now in the kinect_challenge/ChallengeMap folder:
+there are three copies of the map:
+- map_challenge.pgm      (the origional map created on the robot during mapping phase)
+- map_remapped.pgm       (the reworked map after manualy adjusting loop closures in rtabmap and regenerating the 2D and 3D maps)
+- map_final.pgm          (the final map we used for navigation phase, this has some manual edits to remove noise and close the open external holes in the map)
+
+map_final.yaml is the associated yaml file for the final version of the map.
+the waypoint.wp and tour.wpt fiels are also in the folder.
+
+Rename any of the three maps to just map.pgm and map.yaml (update the internal name in map.yaml) to use any of these maps.
+
+The 3D rtabmap.db files are two big (~217MB) to put into github, we will try to find an alternative repository for them soon.
+
 
 ### Basic launch instructions.
 Running the challenge scenarios is done in three phases, mapping, waypoint creation and navigation.
