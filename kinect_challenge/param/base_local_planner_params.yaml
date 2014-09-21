@@ -1,7 +1,7 @@
 TrajectoryPlannerROS:
 
 # Robot Configuration Parameters
-  max_vel_x: 1.0
+  max_vel_x: 0.5
   min_vel_x: 0.13
 
   max_vel_theta:  1.0
@@ -25,8 +25,8 @@ TrajectoryPlannerROS:
 
 # Trajectory Scoring Parameters
   meter_scoring: true
-  pdist_scale: 0.6
-  gdist_scale: 0.8
+  pdist_scale: 0.02
+  gdist_scale: 1.5
   occdist_scale: 0.01
   heading_lookahead: 0.325
   dwa: true
@@ -40,3 +40,6 @@ TrajectoryPlannerROS:
   min_vel_y: 0.0
   acc_lim_y: 0.0
   vy_samples: 0
+
+
+

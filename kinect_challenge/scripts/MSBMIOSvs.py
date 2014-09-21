@@ -212,7 +212,7 @@ if __name__ == '__main__':
         
         rospy.loginfo(  "%s" % sys.argv)
 
-        host=rospy.get_param("/MSBMIOSvs/host_IP","127.0.0.1") # needs to be overridden in launch file
+        host=rospy.get_param("/MSBMIOSvs/host_IP","169.254.232.242") # needs to be overridden in launch file
         port=int(rospy.get_param("/MSBMIOSvs/host_port","7576"))
         
 

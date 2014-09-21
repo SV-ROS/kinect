@@ -308,7 +308,7 @@ if __name__ == "__main__":
 
         if sts ==0:
             if mapPath == "":
-                mapPath = rospy.get_param("/Mapper/MapPath","")
+                mapPath = rospy.get_param("Mapper/MapPath","")
                 rospy.loginfo(  "Found param mapPath='%s'" % mapPath)
                 
             mapPath = mapPath.strip()
@@ -322,7 +322,7 @@ if __name__ == "__main__":
                  
         if sts ==0:
             if waypointFile == "":
-                waypointFile = rospy.get_param("/Mapper/WaypointFile","")
+                waypointFile = rospy.get_param("Mapper/WaypointFile","")
                 rospy.loginfo(  "Found param Waypointfile='%s'" % waypointFile)
                 
             waypointFile = waypointFile.strip()
@@ -336,7 +336,7 @@ if __name__ == "__main__":
  
         if sts ==0:
             if lmButtonIdx == -1:
-                lmButtonIdx = int(rospy.get_param("/Mapper/lmButtonIdx","-1"))
+                lmButtonIdx = int(rospy.get_param("Mapper/lmButtonIdx","-1"))
                 
            
             if lmButtonIdx == -1:
@@ -348,7 +348,7 @@ if __name__ == "__main__":
 
         if sts ==0:
             if msButtonIdx == -1:
-                msButtonIdx = int(rospy.get_param("/Mapper/msButtonIdx","-1"))
+                msButtonIdx = int(rospy.get_param("Mapper/msButtonIdx","-1"))
                 
            
             if msButtonIdx == -1:
@@ -358,10 +358,10 @@ if __name__ == "__main__":
             else:
                 rospy.loginfo(  "Using msButtonIdx %d" % msButtonIdx)
                 
-        if sts ==0:
-            # all ok so start the node
-            mapper = Mapper(mapPath,waypointFile,lmButtonIdx,msButtonIdx)
-            sts = mapper.Run()
+        #if sts ==0:
+        # all ok so start the node
+        mapper = Mapper(mapPath,waypointFile,lmButtonIdx,msButtonIdx)
+        sts = mapper.Run()
 
     except Exception as ex:
         rospy.loginfo(  "Mapper Crashed with exception: %s" % str(ex))

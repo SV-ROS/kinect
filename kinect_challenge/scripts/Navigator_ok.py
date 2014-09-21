@@ -29,7 +29,6 @@ import actionlib
 
 import tf
 import geometry_msgs.msg
-from geometry_msgs.msg import Twist
 import shutil
 
 import math
@@ -45,8 +44,6 @@ from visualization_msgs.msg import Marker
 from move_base_msgs.msg import MoveBaseAction,MoveBaseGoal
 from actionlib_msgs.msg import GoalStatus
 from std_srvs.srv import Empty
-from rosgraph_msgs.msg import Log
-from random import random
 
 import SayText
 
@@ -87,38 +84,19 @@ class Navigator():
         while not self.ac.wait_for_server(rospy.Duration(5.0)) and not rospy.is_shutdown():
             rospy.loginfo(  "Waiting for Move Base Server")
 
-        # subscribe to the /rosout topic so we can detect when the robot is stuck
-        rospy.Subscriber("/rosout", Log, self.rosoutCallback)
-
-        # publisher for Twist commands
-        self.cmd_vel_pub = rospy.Publisher("/p3dx/cmd_vel" ,Twist)
-
-        # service to clear the costmaps
-        self.clear_costmaps = rospy.ServiceProxy("/move_base/clear_costmaps", Empty)
 
         # MSBM expects a runID during navigation, use current time in seconds past epoch for each run
         self.runID = int(time.time()*1000)
 
         self.rate = rospy.Rate(10.0)
 
-        self.tourIdx =0 # start dummy leg by going to start waypoint of first leg of the tour
-
-        self.max_tries = 3 # number of attempts to replan a path to a waypoint
-        self.n_tries = 0
+        self.tourIdx =0 # start at first leg of the tour
 
         # read the waypoints and tour files
         self.waypoints = self.loadWaypoints(self.waypointFile)
         self.waypointTour = self.loadWaypointTour(self.waypointTour)
 
-        # a flag to indicate the robot is stuck
-        self.stuck = False
-
-        # 30 seconds after leaving a waypoint, the robot will clear the costmape and turn in place
-        # 360 degrees to look for shortcuts
-        self.lookaround_timer = 30
-        self.lookaround_start = rospy.Time.now()
-        self.lookaround_done = False
-
+        
         self.vocaliser = SayText.SayText()
 
     # say stuff
@@ -129,17 +107,11 @@ class Navigator():
     # idx is line number in tour file, goal set to waypoint of 'to' location in tour file at line idx.
     # assumes we are currently at waypoint of 'from' location in tour file at line idx
     def setGoal(self,idx):
-
+        
         self.goal = MoveBaseGoal()
 
         # get waypoint pose
-
-        if idx ==-1:
-            tgt = self.waypointTour[0][0]
-        else:
-            tgt = self.waypointTour[idx][1]
-
-        
+        tgt = self.waypointTour[idx][1]
         tf = self.waypoints[tgt]
 
         # create goal pose
@@ -151,7 +123,7 @@ class Navigator():
         self.goal.target_pose.pose.orientation.y  = tf[1][1]
         self.goal.target_pose.pose.orientation.z  = tf[1][2]
         self.goal.target_pose.pose.orientation.w  = tf[1][3]
-
+        
         self.goal.target_pose.header.frame_id="map"
         self.goal.target_pose.header.stamp = rospy.Time.now()
 
@@ -159,11 +131,10 @@ class Navigator():
         self.ac.send_goal(self.goal)
 
         # return the target waypoint number
-        self.target = tgt
         return tgt
 
     # read the tour file
-    #
+    # 
     # each line has two comma separated integers,  fromWP, toWP
     #
     #  fills in tour list with tuples of (to,from) pairs and returns it
@@ -225,7 +196,7 @@ class Navigator():
 
         # get starting node from first tour leg
         wpIdx =self.waypointTour[self.tourIdx][0]
-
+        
         goalTime = 300/5  # allow 300 seconds (in 5 second chunks to complete the leg)
         time.sleep(15)    # allow time to localize and drive to start node !!! TODO: make this triggered by Joystick button
 
@@ -233,113 +204,39 @@ class Navigator():
         self.say("Navigator Ready")
 
         while not rospy.is_shutdown():
-
+            
             # publish the waypoint markers
             self.createMarkers()
 
-            if state == 0: # Send start node and start a leg
-
+            if state == 0: # Send start node and start a leg 
+            
                 rospy.loginfo("Sending start %d" % wpIdx)
 
                 # send message to MSBM indicating we are starting a leg from 'to' node (starts the clock)
                 sts=MSBMIOClient.MSBMIOClient("start",str(wpIdx),"%d" % self.runID) # always returns OK
-
-                self.say("Starting from waypoint %d"%wpIdx)
-                time.sleep(2)
-
-                #if sts =="OK": # should always be ok on start leg
-                state = 2
                 
-            if state == 2:
+                self.say("Starting from waypoint %d"%wpIdx)
+                #time.sleep(5)
+                if sts =="OK": # should always be ok on start leg
 
+                    
                     rospy.loginfo("Sending goal %d" % self.waypointTour[self.tourIdx][1])
 
                     # tell move base the end waypoint and set it as current goal
                     wpIdx=self.setGoal(self.tourIdx)
-
+                    
                     self.say("Setting goal waypoint %d"%wpIdx)
 
                     # setup leg timer
                     goalTime = 300/5
-
-                    # start the look around timer
-                    self.lookaround_done = False
-                    self.lookaround_start = rospy.Time.now()
-
                     state =1  # next state
 
 
             if state == 1: # monitor goal progress
-
+            
                 rospy.loginfo("waiting to reach goal" )
-
-                if self.stuck:
-                    rospy.loginfo("Robot is stuck.  Will try backing up and turning...")
-
-                    # cancel the current waypoint goal
-                    self.ac.cancel_all_goals()
-                    self.ac.wait_for_result(rospy.Duration(15))
-
-                    # back up a bit assuming we've run into something going forward
-
-                    escape_interval = 3.0
-                    tick = 0.2
-                    clock = 0.0
-
-                    for bkIdx in range(len(self.waypointTour)):
-                        if self.waypointTour[bkIdx][1] != self.target:
-                            break
-
-                    rospy.loginfo("Robot is stuck.  Will try goal %d..." % bkIdx)
-                    self.setGoal(bkIdx)
-
-                    while clock < escape_interval:
-                        #self.cmd_vel_pub.publish(cmd_vel)
-                        rospy.sleep(tick)
-                        clock += tick
-
-                    #self.cmd_vel_pub.publish(Twist())
-
-                    # assume we got unstuck and try the goal again
-                    self.stuck = False
-                    self.clear_costmaps()
-                    state = 1
-                    wpIdx=self.setGoal(self.tourIdx)
-                    continue
-
                 goalStatus = self.ac.wait_for_result(rospy.Duration(5)) # wait for 5 seconds to see if we reach the goal yet
-
-                # check to see if it is time to look around
-                now = rospy.Time.now()
-                if not self.lookaround_done and (now - self.lookaround_start) >= rospy.Duration(self.lookaround_timer):
-                    rospy.loginfo("Looking for shortcuts...")
-
-                    # cancel the current waypoint goal
-                    self.ac.cancel_all_goals()
-                    self.ac.wait_for_result(rospy.Duration(15))
-
-                    # clear costmaps
-                    self.clear_costmaps()
-
-                    # rotate 360 degrees with a small forward motion
-                    cmd_vel = Twist()
-                    cmd_vel.angular.z = 0.2
-                    cmd_vel.linear.x = 0.02
-
-                    lookaround_interval = 20
-                    tick = 0.2
-                    clock = 0.0
-
-                    while clock < lookaround_interval:
-                        self.cmd_vel_pub.publish(cmd_vel)
-                        rospy.sleep(tick)
-                        clock += tick
-
-                    self.cmd_vel_pub.publish(Twist())
-                    self.lookaround_done = True
-                    wpIdx=self.setGoal(self.tourIdx)
-
-                if goalStatus == True:
+                if goalStatus == True:  
                     state = 10 # we got there or aborted
                 else:
                     goalTime = goalTime-1 # 5 seconds is up, count down main loop timer
@@ -348,64 +245,49 @@ class Navigator():
 
 
             if state == 10:  # we finished the goal
-
+            
                 goalSts = self.ac.get_state() # get actual completion status
-                print "GOAL STATUS:", str(goalSts)
-
-                if goalSts == GoalStatus.ABORTED:
-                    self.n_tries += 1
-                    if self.n_tries >= self.max_tries:
-                        rospy.loginfo("Giving up.")
-                        self.n_tries = 0
-                        state = 2 # resend goal
-                    else:
-                        rospy.loginfo("Goal aborted.")
-                        self.say("Goal aborted. Retry")
-                        rospy.loginfo("Attempt " + str(self.n_tries + 1) + " of " + str(self.max_tries))
-                        state = 100
-
-                elif goalSts == GoalStatus.SUCCEEDED:  # did we really get there
-
+                print str(goalSts)
+                
+                if goalSts == GoalStatus.SUCCEEDED:  # did we really get there
+                    
                     rospy.loginfo("Reached goal, sending notify" )
 
                     # notify MSBM we are at target waypoint
                     sts = MSBMIOClient.MSBMIOClient("end",str(wpIdx),"%d" % self.runID)
-
+                    
                     if sts =="OK":  # MSBM accepted waypoint
                         rospy.loginfo("Goal achieved, start next segment" )
                         self.say("Reached goal waypoint %d"%wpIdx)
                         self.setNextWaypoint() # get next leg
-                        self.clear_costmaps() # clear costmaps
                         state = 0 # go back to send next start notification
-
+                        
 
                     else: # MSBM did not like us, try again
                         rospy.loginfo( "Failed to record arrival, retry")
                         self.say("Failed to notify benchmark that goal waypoint %d reached. Will retry"%wpIdx)
-
-                        state = 100
+                       
+                        state = 0
 
                 else: # move base failed to get us there
                     rospy.loginfo( "Failed to reach goal %d. Status '%d'" % (wpIdx,goalSts))
                     self.say("Failed to reach goal waypoint %d. Status is %d" %(wpIdx,goalSts))
                     state = 100 # skip to next wp
 
-
+                    
             if state == 20: # did not reach the goal in time, give up and move to next WP
                 self.ac.cancel_goal()
                 rospy.loginfo( "Failed to reach goal %d in designated time." % wpIdx)
                 self.say("Failed to reached goal waypoint %d in designated time"%wpIdx)
                 state = 100
 
-
-            if state == 100: # retry  WP
-                rospy.loginfo( "ReTrying next goal")
-                self.say( "ReTrying next goal")
-                #self.setNextWaypoint()# skip WP and try next one
-                state = 1
-                self.stuck = True
                 
-
+            if state == 100: # skip to next WP
+                rospy.loginfo( "Trying next goal")
+                self.say( "Trying next goal")
+                self.setNextWaypoint()# skip WP and try next one
+                state = 0
+                
 
             self.rate.sleep()
 
@@ -456,7 +338,7 @@ class Navigator():
     # create a visualization marker arrow at the tf location (in /map frame) and with id num
     def makeArrowMarker(self,tf,num):
         return self._makeMarker(tf,num)
-
+                
     # create a text marker at offset above(0.575m)  tf(in /map frame)  with id num+100 and text = str(num)
     def makeTextMarker(self,tf,num):
 
@@ -473,7 +355,7 @@ class Navigator():
         marker.color.b = 0.0
         marker.text=str(num)  # set the text string
         return marker
-
+                    
     # create a visualization marker arrow  at offset above(0.5m) tf (in /map frame) location and with id num
     def _makeMarker(self,tf,num):
 
@@ -509,11 +391,6 @@ class Navigator():
         marker.lifetime = rospy.Duration()
 
         return marker
-
-    def rosoutCallback(self, msg):
-        keyword = 'unstuck'
-        if keyword in msg.msg:
-            self.stuck = True
 
 
 
@@ -574,7 +451,7 @@ if __name__ == "__main__":
 
             if waypointTour == "":
                 waypointTour = rospy.get_param("/Navigator/WaypointTour","")
-
+                
             rospy.loginfo(  "Found param waypointTour='%s'" % waypointTour)
 
             waypointTour = waypointTour.strip()
@@ -598,5 +475,16 @@ if __name__ == "__main__":
 
     finally:
         rospy.loginfo(  "Navigator Finished")
-
+        
     sys.exit(sts)
+
+
+
+
+
+
+
+
+
+
+

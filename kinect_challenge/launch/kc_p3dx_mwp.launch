@@ -42,8 +42,8 @@
         <param name="scan_height" value="60"/>
         <param name="output_frame_id" value="/camera_depth_frame"/>
         <param name="range_min" value="0.45"/>
-        <param name="range_max" value="4.0"/>
-        <remap from="image" to="/camera/depth_registered/image_raw"/>
+        <param name="range_max" value="4.0"/> 
+       <remap from="image" to="/camera/depth_registered/image_raw"/>
         <remap from="scan" to="/scan"/>
     </node>
 
@@ -52,7 +52,7 @@
 
         <node name="rtabmap" pkg="rtabmap" type="rtabmap" output="screen" args="" >
 
-    <!-- param name="config_path" type="str" value="$(find kinect_challenge)/config/rtabmap_config_nav.ini"/ -->
+            <!-- param name="config_path" type="str" value="$(find kinect_challenge)/config/rtabmap_config_nav.ini"/ -->
 
             <param name="frame_id" type="string" value="base_link"/>
 
@@ -91,12 +91,10 @@
           <param name="Mem/RehearsalSimilarity" type="string" value="0.45"/>
           <param name="Mem/RehearsedNodesKept" type="string" value="false"/>   
           <param name="RGBD/OptimizeFromGraphEnd" type="string" value="false"/>    <!-- Optimize graph from the latest node -->
-	  <param name="Rtabmap/LoopThr" type="string" value="0.2"/>                <!-- reject more global loop closures -->
-  
+  <param name="Rtabmap/LoopThr" type="string" value="0.2"/>                <!-- reject more global loop closures -->
   <param name="Kp/RoiRatios" type="string" value="0.0 0.0 0.0 0.3"/>  
-
-
-            
+  
+  
 
 
         </node>
@@ -112,16 +110,41 @@
             <remap from="odom" to="/odom"/>
         </node>
         
-        <node pkg="rtabmap" type="grid_map_assembler" name="grid_map_assembler" output="screen">
+        <!-- node pkg="rtabmap" type="grid_map_assembler" name="grid_map_assembler" output="screen">
             <remap from="grid_map" to="/map"/>
             <param name="scan_voxel_size" type="str" value="0.01" />
-        </node>
+        </node -->
 
     </group>
         
     <node pkg="rviz" type="rviz" name="rviz" args="-d $(find rtabmap)/launch/config/rgbd.rviz"/>
 
+    <group ns="nothing" >
+		            <param name="Rtabmap/DetectionRate" type="string" value="3"/>                 <!-- Don't need to do relocation very often! Though better results if the same rate as when mapping. -->
 
+            <param name="Mem/STMSize" type="string" value="1"/>                           <!-- 1 location in short-term memory -->
+            <param name="Mem/IncrementalMemory" type="string" value="false"/>             <!-- false = Localization mode-->
+
+            <param name="RGBD/ScanMatchingSize" type="string" value="1"/>                 <!-- Do odometry correction with consecutive laser scans -->
+            <param name="RGBD/LocalLoopDetectionSpace" type="string" value="false"/>      <!-- Local loop closure detection (using estimated position) with locations in WM -->
+            <param name="RGBD/LocalLoopDetectionTime" type="string" value="true"/>       <!-- Local loop closure detection with locations in STM -->
+
+            <param name="LccIcp/Type" type="string" value="1"/>                           <!-- 0=No ICP, 1=ICP 3D, 2=ICP 2D -->
+            <param name="LccBow/MaxDepth" type="string" value="0.0"/>                     <!-- 3D visual words maximum depth 0=infinity -->
+            <param name="LccBow/InlierDistance" type="string" value="0.1"/>               <!-- 3D visual words correspondence distance -->
+            <param name="LccBow/MinInliers" type="string" value="10"/>
+
+            <param name="Odom/MinInliers" type="string" value="10"/>
+
+            <param name="Rtabmap/StatisticLogged" type="string" value="true"/>
+            <param name="RGBD/OptimizeFromGraphEnd" value = "false" type="string" />
+            
+            <param name="queue_size" type="int" value="10"/>
+
+
+
+
+    </group>
 
     <!--  Change Teleop config if using different method or controller  -->
     <!--  <include file="$(find turtlebot_teleop)/launch/ps3_teleop.launch" />  -->
@@ -148,44 +171,35 @@
         <remap from="cmd_vel_mux/input/navi"   to="/nav_cmd_vel" />
     </node>
 
-
-    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
-        <rosparam file="$(find kinect_challenge)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
-        <rosparam file="$(find kinect_challenge)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />
-        <rosparam file="$(find kinect_challenge)/param/local_costmap_params.yaml" command="load" />
-        <rosparam file="$(find kinect_challenge)/param/global_costmap_params.yaml" command="load" />
-        <rosparam file="$(find kinect_challenge)/param/base_local_planner_params.yaml" command="load" />
-        <rosparam file="$(find kinect_challenge)/param/move_base_params.yaml" command="load" />
-
-        <remap from="cmd_vel" to="/nav_cmd_vel_raw"/>
-        <remap from="odom" to="/odom"/>
-    </node>
-   
     <node type="MSBMIOSvs.py" name = "MSBMIOSvs" pkg="kinect_challenge" output="screen">
 
         <!-- host IP address, IP address of PC running Microsoft Benchmark -->
         <!-- set to "sim" to simulate connection to the Microsoft app (always returns "OK") -->
-        <!-- param name="host_IP" type="str" value="169.254.27.47" / -->
-        <param name="host_IP" type="str" value="sim" />
+        <param name="host_IP" type="str" value="169.254.27.47" />
+        <!--param name="host_IP" type="str" value="sim" / -->
         <!-- port to talk to Microsoft Benchmark on -->
         <param name="host_port" type="int" value="7576" />
 
     </node>
   
-    <node type="Navigator.py" name = "Navigator"    pkg="kinect_challenge" output="screen">
+    <node type="Mapper.py"    name = "Mapper"    pkg="kinect_challenge" output="screen">
+
         <param name="MapPath" type="str" value="$(find kinect_challenge)/maps" />
-        
-        <!-- Waypoints saved here, file in maps folder -->
+
+        <!-- Waypoints saved during mapping, file in maps folder -->
+        <!-- any existing waypoint file is backed up to a file with time stamp appended to the name -->
         <param name="WaypointFile" type="str" value="waypoints.wp" />
-        
-        <!-- Create/Edit this file to determine the route to take during navigation
-            file is in the maps folder.
-            syntax: One landmark pair per line, landmark ids 0 based
-            <to landmark id>  <from landmark id>
-            ...
-            
-        -->
-        <param name="WaypointTour" type="str" value="tour.wpt" />
+
+        <!-- Button index for joystick button used to place a landmark -->
+        <!--param name="lmButtonIdx"    type="int" value="1" /--> <!-- logitech "2" -->
+        <param name="lmButtonIdx"    type="int" value="0" /> <!-- xbox "A" -->
+
+        <!-- Button index for joystick button used to save current map -->
+        <!-- map saved to map folder, file name = map_<timestamp>.[png|yaml] -->
+        <!-- map  saved to map folder, file name = map.[png|yaml] -->
+        <!-- param name="msButtonIdx"    type="int" value="0" /--> <!-- logitech "1" -->
+        <param name="msButtonIdx"    type="int" value="2" /> <!-- xbox "X" -->
+
     </node>
 
     <node pkg="sound_play" name="soundplay" type="soundplay_node.py" />
