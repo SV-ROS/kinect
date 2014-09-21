@@ -39,12 +39,13 @@ To try navigation in the room model run `roslaunch kinect amcl_demo.launch`. It 
 This package provides scripts and launch files for the competition environment for the mapping, waypoint creation and navigation phases
 It provides these Nodes:
  - MSBMIOSvs    - A service for communicating with the Microsoft Benchmark Computer, a simulation mode is available so you 
-              don't need to run the Microsoft app to test the mapping and navigation. (see configuration below)
- - Mapper.py    - A Node that runs the mapping and waypoint creation phases
- - Navigator.py - A Node that runs the navigation phase
+              don't need to run the Microsoft app to test the mapping and navigation. (see configuration below).
+ - Mapper.py    - A Node that runs the mapping and waypoint creation phases.
+ - Navigator.py - A Node that runs the navigation phase.
  - SayText.py   - A node to interface with ROS sound_paly for voice synth.
 
 It supports the real Pinoner P3DX robot.
+
 It also needs:
    - rtabmap installed
    - ROSARIA installed
@@ -60,7 +61,7 @@ Running the challenge scenarios is done in three phases, mapping, waypoint creat
 
 To run the mapping phase launch
 
- `roslaunch kinect_challenge kc_p3dx_map.launch`. 
+ `roslaunch kinect_challenge kc_p3dx_map.launch`
 
 It should launch everything you need for mapping (see configuration below)
 
@@ -73,10 +74,11 @@ Use ^C to end the launch file when done.
 The final rtabmap.db of the 3D map is not fully saved until the launch file has fully terminated.
 
 
-#### Waypoint creation
+#### Waypoint creation:
 If running the Microsoft app start it on the windows computer first, else configure it for sim mode, (see below)
 
 To run the waypoint creation phase launch
+
  `roslaunch kinect_challenge kc_p3dx_mwp.launch`
  
 It should launch everything you need for waypoint creation (see configuration below)
@@ -97,7 +99,7 @@ If running the Microsoft app start it on the windows computer first, else config
 
 To run navigation run
 
- `roslaunch kinect_challenge kc_p3dx_nav.launch`.
+ `roslaunch kinect_challenge kc_p3dx_nav.launch`
 
 It should launch everything you need for navigation (see configuration below)
 
@@ -120,7 +122,7 @@ plug-in and it should be display the point cloud.
 
 The launch files are in kinect_challenge\launch and can be modified to fit your robot.
 
-Modify the kc_p3dx_map.launch and kc_p3dx_nav.launch to suit your robot (see comments in the files to add your base launch entries)
+Modify the kc_p3dx_map.launch, kc_p3dx_mwp.launch and kc_p3dx_nav.launch to suit your robot (see comments in the files to add your base launch entries)
 You may need to modify the teleop launch if you are not using a Microsoft XBox 360 controller
 
 For mapping the Joystick buttons used can be configured with the lmButtonIdx and msButtonIdx parameters passed to the Mapper.py node
