@@ -14,9 +14,8 @@ Panels:
         - /Marker1
         - /Pose1
         - /MapCloud1
-        - /MapCloud1/Status1
       Splitter Ratio: 0.5
-    Tree Height: 766
+    Tree Height: 559
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -66,196 +65,71 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
-        base_footprint:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        camera_depth_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        camera_depth_optical_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
         camera_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        camera_rgb_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        camera_rgb_optical_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        front_wheel_link:
+        center_hubcap:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        gyro_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        laser:
+        center_wheel:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        left_cliff_sensor_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        left_wheel_link:
+        front_sonar:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        leftfront_cliff_sensor_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        plate_0_link:
+        lms100:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        plate_1_link:
+        p3dx_left_hubcap:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        plate_2_link:
+        p3dx_left_wheel:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        plate_3_link:
+        p3dx_right_hubcap:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        rear_wheel_link:
+        p3dx_right_wheel:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        right_cliff_sensor_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        right_wheel_link:
+        post:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        rightfront_cliff_sensor_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        spacer_0_link:
+        swivel:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        spacer_1_link:
+        top_plate:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        spacer_2_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        spacer_3_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        standoff_2in_0_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        standoff_2in_1_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        standoff_2in_2_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        standoff_2in_3_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        standoff_2in_4_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        standoff_2in_5_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        standoff_2in_6_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        standoff_2in_7_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        standoff_8in_0_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        standoff_8in_1_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        standoff_8in_2_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        standoff_8in_3_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        standoff_kinect_0_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        standoff_kinect_1_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        wall_sensor_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
       Name: RobotModel
       Robot Description: robot_description
       TF Prefix: ""
@@ -279,8 +153,8 @@ Visualization Manager:
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
-        Max Value: 0.304
-        Min Value: 0.304
+        Max Value: 0.634486
+        Min Value: 0.604607
         Value: true
       Axis: Z
       Channel Name: intensity
@@ -502,7 +376,7 @@ Visualization Manager:
       Cloud max depth (m): 4
       Cloud voxel size (m): 0.01
       Color: 255; 255; 255
-      Color Transformer: ""
+      Color Transformer: RGB8
       Download graph: false
       Download map: false
       Enabled: true
@@ -514,7 +388,7 @@ Visualization Manager:
       Name: MapCloud
       Node filtering angle (degrees): 30
       Node filtering radius (m): 0.2
-      Position Transformer: ""
+      Position Transformer: XYZ
       Size (Pixels): 3
       Size (m): 0.01
       Style: Flat Squares
@@ -541,32 +415,32 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 50.3514
+      Distance: 19.6173
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 10.2601
-        Y: 10.3351
-        Z: -10.2588
+        X: -1.05478
+        Y: 0.126563
+        Z: -6.58215
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.939796
+      Pitch: 1.3548
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 3.87356
+      Yaw: 6.26674
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 979
+  Height: 797
   Hide Left Dock: false
   Hide Right Dock: false
   Image:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000400000000000002010000038dfc0200000006fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000006400fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c00610079007301000000280000038d000000dd00fffffffb0000000a0049006d006100670065000000020c000001010000001600ffffff000000010000010b00000294fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003300000294000000b000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004a00000003efc0100000002fb0000000800540069006d00650000000000000004a0000002f600fffffffb0000000800540069006d006501000000000000045000000000000000000000042c0000038d00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd00000004000000000000019e000002befc0200000006fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000006400fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c0061007900730100000041000002be000000dd00fffffffb0000000a0049006d006100670065000000020c000001010000001600ffffff000000010000010b00000294fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003300000294000000b000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004a00000003efc0100000002fb0000000800540069006d00650000000000000004a0000002f600fffffffb0000000800540069006d00650100000000000004500000000000000000000002dc000002be00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:
@@ -575,6 +449,6 @@ Window Geometry:
     collapsed: false
   Views:
     collapsed: false
-  Width: 1587
-  X: 184
-  Y: 403
+  Width: 1152
+  X: 718
+  Y: 24

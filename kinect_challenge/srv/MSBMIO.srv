@@ -1,5 +1,5 @@
-string Action
-string LandmarkID
-string RunID
+string action
+string landmark_id
+string run_id
 ---
-string Status
+string status

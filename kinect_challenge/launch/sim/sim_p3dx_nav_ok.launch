@@ -1,0 +1,21 @@
+<launch>
+  
+  <include file="$(find kinect_challenge)/launch/sim/sim_p3dx_move_base.launch" />
+  
+  <include file="$(find kinect_challenge)/launch/sim/sim_p3dx_localize.launch" />
+
+  <node type="navigator_ok.py" name="navigator"    pkg="kinect_challenge" output="screen">
+      <param name="map_path" type="str" value="$(find kinect_challenge)/maps/sim" />
+        
+      <!-- Waypoints saved here, file in maps folder -->
+      <param name="waypoint_file" type="str" value="waypoints.wp" />
+        
+      <!-- Create/Edit this file to determine the route to take during navigation
+          file is in the maps folder.
+          syntax: One landmark pair per line, landmark ids 0 based
+          <to landmark id>  <from landmark id>
+          ...    
+        -->
+        <param name="waypoint_tour" type="str" value="tour.wpt" />
+    </node>
+</launch>

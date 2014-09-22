@@ -1,0 +1,8 @@
+<launch>
+
+  <!-- Bring up move_base with the appropriate parameters -->
+  <include file="$(find kinect_challenge)/launch/sim/sim_move_base_pioneer.launch" />
+  
+  <include file="$(find kinect_challenge)/launch/sim/sim_amcl.launch" />
+  
+</launch>

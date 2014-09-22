@@ -140,7 +140,7 @@ catkin_package(
 #   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 # )
 
-catkin_install_python(PROGRAMS scripts/MSBMIOSvs.py scripts/MSBMIOClient.py scripts/Mapper.py scripts/Navigator.py
+catkin_install_python(PROGRAMS scripts/msbmio_svs.py scripts/msbmio_client.py scripts/mapper.py scripts/navigator.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
   

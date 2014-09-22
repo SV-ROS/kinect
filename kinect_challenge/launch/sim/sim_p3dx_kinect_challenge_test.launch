@@ -1,0 +1,42 @@
+<launch>
+  <arg name="world" default="$(find kinect_challenge)/worlds/kinect_challenge_test.world" />
+
+  <!-- these are the arguments you can pass this launch file, for example paused:=true -->
+  <arg name="paused" default="false" />
+  <arg name="use_sim_time" default="true" />
+  <arg name="gui" default="true" />
+  <arg name="headless" default="false" />
+  <arg name="debug" default="false" />
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(arg world)" />
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="paused" value="$(arg paused)" />
+    <arg name="use_sim_time" value="$(arg use_sim_time)" />
+    <arg name="headless" value="$(arg headless)" />
+  </include>
+
+  <param name="robot_description" command="$(find xacro)/xacro.py '$(find kinect)/urdf/p3dx_kinect.xacro'" />
+
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
+    respawn="false" output="screen" args="-urdf -model p3dx -param robot_description" />
+
+  <include file="$(find p3dx_control)/launch/control.launch" />
+  
+  <node pkg="tf" type="static_transform_publisher" name="static_transform_publisher2" args="-0.2 0 0.036 0 0 0 base_link center_wheel 50"/>
+  <node pkg="tf" type="static_transform_publisher" name="static_transform_publisher3" args="-0.178 0 0.052 0 0 0 base_link swivel 50"/>
+  
+  <node pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" name="depthimage_to_laserscan">
+    <param name="scan_height" value="60"/>
+    <param name="output_frame_id" value="/camera_depth_frame"/>
+    <param name="range_min" value="0.45"/>
+    <param name="range_min" value="4.0"/>
+    <remap from="image" to="/camera/depth/image_raw"/>
+    <remap from="scan" to="/scan"/>
+  </node>
+
+  <!-- Fire up RViz to monitor the mapping process -->
+  <!-- include file="$(find kinect_challenge)/launch/view_robot.launch" / -->
+    
+</launch>

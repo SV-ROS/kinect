@@ -1,0 +1,24 @@
+<launch>
+
+  <include file="$(find kinect_challenge)/launch/sim/sim_p3dx_localize.launch" />
+    
+  <node type="mapper.py"    name="mapper"    pkg="kinect_challenge" output="screen">
+    <param name="map_path" type="str" value="$(find kinect_challenge)/maps/sim" />
+    
+    <!-- Waypoints saved during mapping, file in maps folder -->
+    <!-- any existing waypoint file is backed up to a file with time stamp appended to the name -->
+    <param name="waypoint_file" type="str" value="waypoints.wp" />
+    
+    <!-- Button index for joystick button used to place a landmark -->
+    <param name="lm_button_index"    type="int" value="2" />
+    
+    <!-- Button index for joystick button used to save current map -->
+    <!-- map saved to map folder, file name = map_<timestamp>.[png|yaml] -->
+    <!-- map  saved to map folder, file name = map.[png|yaml] -->
+    <param name="ms_button_index"    type="int" value="1" />
+    
+    <remap from="base_footprint" to="base_link" />
+  </node>
+    
+</launch>
+

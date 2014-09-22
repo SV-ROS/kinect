@@ -38,11 +38,11 @@ To try navigation in the room model run `roslaunch kinect amcl_demo.launch`. It 
 
 This package provides scripts and launch files for the competition environment for the mapping, waypoint creation and navigation phases
 It provides these Nodes:
- - MSBMIOSvs    - A service for communicating with the Microsoft Benchmark Computer, a simulation mode is available so you 
+ - msbmio_svs.py    - A service for communicating with the Microsoft Benchmark Computer, a simulation mode is available so you 
               don't need to run the Microsoft app to test the mapping and navigation. (see configuration below).
- - Mapper.py    - A Node that runs the mapping and waypoint creation phases.
- - Navigator.py - A Node that runs the navigation phase.
- - SayText.py   - A node to interface with ROS sound_paly for voice synth.
+ - mapper.py    - A Node that runs the mapping and waypoint creation phases.
+ - navigator.py - A Node that runs the navigation phase.
+ - say_text.py   - A node to interface with ROS sound_paly for voice synth.
 
 It supports the real Pinoner P3DX robot.
 
@@ -183,5 +183,5 @@ See the Microsoft Rules for details of what makes a valid tour.
 ### To Do:
  - Handle failure to find a way point.
  - Allow restarting from an intermediate location
- - Allow the runID to be manually set before launching Navigation
+ - Allow the run_id to be manually set before launching Navigation
 

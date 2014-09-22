@@ -1,0 +1,9 @@
+<launch>
+     <include file="$(find kinect_challenge)/launch/sim/sim_p3dx_test_world.launch" />
+    
+     <include file="$(find kinect_challenge)/launch/view_robot.launch" />
+
+     <include file="$(find turtlebot_teleop)/launch/logitech.launch" />
+	
+      <node pkg="topic_tools" type="relay" name="relay1" args="/teleop_velocity_smoother/raw_cmd_vel /p3dx/cmd_vel" />
+</launch>

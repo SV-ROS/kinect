@@ -1,11 +1,9 @@
 <launch>    
-
     <arg name="HOME" default="$(env HOME)" />
 
     <!--  set one and only one of these true (1)-->
     <arg name="USE_FREENECT" default="false" />
     <arg name="USE_OPENNI"   default="true" />
-
 
     <!-- Load the URDF into the ROS Parameter Server -->
     <param name="robot_description" command="$(find xacro)/xacro.py '$(find kinect)/urdf/p3dx_real.xacro'" />
@@ -14,19 +12,14 @@
         <param name="publish_frequency" type="double" value="30.0" />
     </node>
 
-
     <node pkg="tf" type="static_transform_publisher" name="static_transform_publisherx" args="0 0 0 0 0 0          base_link base_footprint 50"/>
     <node pkg="tf" type="static_transform_publisher" name="static_transform_publisher2" args="-0.2 0 0.036 0 0 0   base_link center_wheel 50"/>
     <node pkg="tf" type="static_transform_publisher" name="static_transform_publisher3" args="-0.178 0 0.052 0 0 0 base_link swivel 50"/>
-
 
     <node pkg="rosaria" type="RosAria" name="RosAria" />
 
     <node pkg="topic_tools" type="relay" name="relay1" args="/RosAria/pose /odom" />
     <node pkg="topic_tools" type="relay" name="relay2" args="/robot_cmd_vel /RosAria/cmd_vel" />
-
-
-
 
     <include  if="$(arg USE_FREENECT)" file="$(find kinect_challenge)/launch/freenect.launch" >
         <arg name="depth_registration" value="true" />
@@ -45,7 +38,6 @@
         <remap from="scan" to="/scan"/>
     </node>
 
-
     <group ns="rtabmap">
 
         <node name="rtabmap" pkg="rtabmap" type="rtabmap" output="screen" args="--delete_db_on_start">
@@ -61,7 +53,6 @@
             <remap from="rgb/image" to="/camera/rgb/image_rect_color"/>
             <remap from="depth/image" to="/camera/depth_registered/image_raw"/>
             <remap from="rgb/camera_info" to="/camera/depth_registered/camera_info"/>
-
 
             <param name="queue_size" type="int" value="10"/>
            <param name="Rtabmap/DatabasePath" type="string" value="$(arg HOME)/.ros/rtabmap.db"/>  <!-- Database used for mapping -->
@@ -99,17 +90,11 @@
     </group>
 
     <group ns="XXX">
-
-
-
             <!-- RTAB-Map's parameters: do "rosrun rtabmap rtabmap (double-dash)params" to see the list of available parameters. -->
 
             <!-- param name="config_path" type="str" value="$(find kinect_challenge)/config/rtabmap_config_map.ini"/ -->
 
- 
-
             <param name="Rtabmap/DetectionRate" type="string" value="3"/>            <!-- Don't need to do relocation very often! Though better results if the same rate as when mapping. -->
-
 
             <param name="Mem/STMSize" type="string" value="20"/>                     <!-- 20 location in short-term memory -->
             <param name="Mem/IncrementalMemory" type="string" value="true"/>         <!-- true = mapping mode-->
@@ -141,10 +126,8 @@
     <include file="$(find p3dx_launch)/launch/xbox360_teleop.launch" >
        <arg name="output_cmd_vel_topic" value="/robot_cmd_vel" />
     </include>
-   
-
     
-    <node type="MSBMIOSvs.py" name = "MSBMIOSvs" pkg="kinect_challenge" output="screen">
+    <node type="msbmio_svs.py" name="msbmio_svs" pkg="kinect_challenge" output="screen">
 
         <!-- host IP address, IP address of PC running Microsoft Benchmark -->
         <!-- set to "sim" to simulate connection to the Microsoft app (always returns "OK") -->
@@ -156,27 +139,26 @@
 
     </node>
 
-    <node type="Mapper.py"    name = "Mapper"    pkg="kinect_challenge" output="screen">
+    <node type="mapper.py"    name = "mapper"    pkg="kinect_challenge" output="screen">
 
-        <param name="MapPath" type="str" value="$(find kinect_challenge)/maps" />
+        <param name="map_path" type="str" value="$(find kinect_challenge)/maps" />
 
         <!-- Waypoints saved during mapping, file in maps folder -->
         <!-- any existing waypoint file is backed up to a file with time stamp appended to the name -->
-        <param name="WaypointFile" type="str" value="waypoints.wp" />
+        <param name="waypoint_file" type="str" value="waypoints.wp" />
 
         <!-- Button index for joystick button used to place a landmark -->
-        <!--param name="lmButtonIdx"    type="int" value="1" /--> <!-- logitech "2" -->
-        <param name="lmButtonIdx"    type="int" value="0" /> <!-- xbox "A" -->
+        <!--param name="lm_button_index"    type="int" value="1" /--> <!-- logitech "2" -->
+        <param name="lm_button_index"    type="int" value="0" /> <!-- xbox "A" -->
 
         <!-- Button index for joystick button used to save current map -->
         <!-- map saved to map folder, file name = map_<timestamp>.[png|yaml] -->
         <!-- map  saved to map folder, file name = map.[png|yaml] -->
-        <!-- param name="msButtonIdx"    type="int" value="0" /--> <!-- logitech "1" -->
-        <param name="msButtonIdx"    type="int" value="2" /> <!-- xbox "X" -->
+        <!-- param name="ms_button_index"    type="int" value="0" /--> <!-- logitech "1" -->
+        <param name="ms_button_index"    type="int" value="2" /> <!-- xbox "X" -->
 
     </node>
 
     <node pkg="sound_play" name="soundplay" type="soundplay_node.py" />
-
 
 </launch>
