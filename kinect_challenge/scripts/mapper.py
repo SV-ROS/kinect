@@ -131,7 +131,6 @@ class Mapper():
                 transform_ok = True
                 
             except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-                rospy.loginfo("TF EXCEPTION!!!")
                 pass # ignore these exceptions
                 
             if transform_ok: # got good transform so save it in case we save a waypoint
